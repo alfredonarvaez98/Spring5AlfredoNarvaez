@@ -40,7 +40,7 @@ public class FacturaController {
 	@GetMapping("/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
 
-		Factura factura = clienteService.findFacturaById(id);
+		Factura factura = clienteService.fetchFacturaByIdWithClienteWhithItemFacturaWithProducto(id); // clienteService.findFacturaById(id);
 
 		if (factura == null) {
 			flash.addFlashAttribute("error", "La factura no existe en la base de datos!");
@@ -54,7 +54,7 @@ public class FacturaController {
 
 	@GetMapping("/form/{clienteId}")
 	public String crear(@PathVariable(value = "clienteId") Long clienteId, Map<String, Object> model,
-			RedirectAttributes flash) {
+						RedirectAttributes flash) {
 
 		Cliente cliente = clienteService.findOne(clienteId);
 
@@ -79,9 +79,9 @@ public class FacturaController {
 
 	@PostMapping("/form")
 	public String guardar(@Valid Factura factura, BindingResult result, Model model,
-			@RequestParam(name = "item_id[]", required = false) Long[] itemId,
-			@RequestParam(name = "cantidad[]", required = false) Integer[] cantidad, RedirectAttributes flash,
-			SessionStatus status) {
+						  @RequestParam(name = "item_id[]", required = false) Long[] itemId,
+						  @RequestParam(name = "cantidad[]", required = false) Integer[] cantidad, RedirectAttributes flash,
+						  SessionStatus status) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Crear Factura");
